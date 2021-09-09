@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.wildrimak.proposta.api.externas.analisefinanceira.services.AnaliseFinanceiraService;
 import br.com.wildrimak.proposta.domain.models.Proposta;
 import br.com.wildrimak.proposta.domain.repositories.PropostaRepository;
 
@@ -17,6 +18,9 @@ public class PropostaService {
 
     @Autowired
     private PropostaRepository propostaRepository;
+
+    @Autowired
+    private AnaliseFinanceiraService analiseFinanceiraService;
 
     public Proposta criarProposta(Proposta proposta) {
 
@@ -37,7 +41,16 @@ public class PropostaService {
 
 	Proposta salva = propostaRepository.save(proposta);
 
-	return salva;
+	logger.info("PropostaService no método criarProposta terminou de salvar a proposta e ficou com esse valor={}",
+		salva);
+
+	Proposta avaliada = analiseFinanceiraService.consultaElegibilidade(salva);
+
+	logger.info(
+		"PropostaService no método criarProposta terminou de avaliar a elegibilidade da proposta e ficou com esse valor={}",
+		avaliada);
+
+	return avaliada;
 
     }
 

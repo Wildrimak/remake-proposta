@@ -3,6 +3,8 @@ package br.com.wildrimak.proposta.domain.models;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -43,13 +45,18 @@ public class Proposta {
     @Positive
     private BigDecimal salario;
 
+    @Enumerated(EnumType.STRING)
+    private StatusProposta statusProposta;
+
     private Proposta() {
+	this.statusProposta = null;
     }
 
     public Proposta(@NotEmpty String documento, @Email @NotEmpty String email, @NotEmpty String nome,
 	    @NotEmpty String endereco, @Positive @NotNull BigDecimal salario) {
 
-	this(); // o objetivo é remover warnign e não quebrar encapsulamento da minha classe por causa do framework
+	this(); // o objetivo é remover warnign e não quebrar encapsulamento da minha classe por
+		// causa do framework
 
 	logger.info(
 		"Proposta recebeu no construtor os seguintes campos: "
@@ -72,10 +79,22 @@ public class Proposta {
 	return documento;
     }
 
+    public String getNome() {
+	return nome;
+    }
+
+    public StatusProposta getStatusProposta() {
+	return statusProposta;
+    }
+
+    public void setStatusProposta(StatusProposta statusProposta) {
+	this.statusProposta = statusProposta;
+    }
+
     @Override
     public String toString() {
 	return "Proposta [id=" + id + ", documento=" + documento + ", email=" + email + ", nome=" + nome + ", endereco="
-		+ endereco + ", salario=" + salario + "]";
+		+ endereco + ", salario=" + salario + ", statusProposta=" + statusProposta + "]";
     }
 
 }
