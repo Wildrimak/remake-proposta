@@ -43,8 +43,13 @@ public class Proposta {
     @Positive
     private BigDecimal salario;
 
+    private Proposta() {
+    }
+
     public Proposta(@NotEmpty String documento, @Email @NotEmpty String email, @NotEmpty String nome,
 	    @NotEmpty String endereco, @Positive @NotNull BigDecimal salario) {
+
+	this(); // o objetivo é remover warnign e não quebrar encapsulamento da minha classe por causa do framework
 
 	logger.info(
 		"Proposta recebeu no construtor os seguintes campos: "
@@ -61,6 +66,10 @@ public class Proposta {
 
     public String getId() {
 	return id;
+    }
+
+    public String getDocumento() {
+	return documento;
     }
 
     @Override
