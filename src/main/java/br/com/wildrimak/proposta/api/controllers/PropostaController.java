@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.wildrimak.proposta.api.requests.PropostaRequest;
 import br.com.wildrimak.proposta.api.validators.DocumentoValidator;
 import br.com.wildrimak.proposta.domain.models.Proposta;
-import br.com.wildrimak.proposta.domain.repositories.PropostaRepository;
+import br.com.wildrimak.proposta.domain.services.PropostaService;
 
 @RestController
 @RequestMapping("/propostas")
@@ -26,7 +26,7 @@ public class PropostaController {
     private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
     @Autowired
-    private PropostaRepository propostaRepository;
+    private PropostaService propostaService;
 
     @Autowired
     private DocumentoValidator documentoValidator;
@@ -40,12 +40,13 @@ public class PropostaController {
 
 	Proposta proposta = propostaRequest.toModel();
 
-	Proposta propostaSalva = propostaRepository.save(proposta);
+	Proposta propostaSalva = propostaService.criarProposta(proposta);
 
 	logger.info(
 		"PropostaController no método criarProposta terminou de salvar uma nova proposta com os seguintes valores={}",
 		propostaSalva);
 
+	// Pode ser melhorado criando um PropostaResponse
 	return ResponseEntity
 		.created(uriComponentsBuilder.path("/propostas/{id}").buildAndExpand(propostaSalva.getId()).toUri())
 		.body(propostaSalva);
